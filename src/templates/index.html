@@ -27,7 +27,7 @@
           <li><a href="/">Home</a></li>
           <li><a href="/">My list</a></li>
           <li><a href="/">Talk with Santa</a></li>
-          <li><a href="/">Contact</a></li>
+          <li><a href="/logout">Logout</a></li>
         </ul>
       </div>
     </div>
@@ -37,7 +37,14 @@
     <div class="row">
       <div class="box">
         <div class="col-lg-12 text-center">
-          <h2 class="intro-text">Dear Santa Claus!</h2>
+          <h2 class="intro-text">Dear Santa Claus! For Christmas I would like... </h2>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                {{ message | safe }}
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
         </div>
       </div>
     </div>
