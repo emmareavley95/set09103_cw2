@@ -35,5 +35,9 @@ def logout():
   flash('Successful log out')
   return redirect(url_for('root'))
 
+@app.errorhandler(404)
+def page_not_found(error):
+  return "We couldn't answer your request. Please try again later or this page might not exist. </br> Please, check your URL", 404
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
