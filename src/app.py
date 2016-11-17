@@ -5,10 +5,10 @@ app = Flask(__name__)
 def root():
   if request.method == 'POST':
     print request.form
-    name = request.form['name']
+    username = request.form['username']
     email = request.form['email']
     password = request.form['password']
-    return render_template('index.html', name=name, email=email), 200
+    return render_template('index.html', username=username, email=email), 200
   else:
     return render_template('login.html')
 
