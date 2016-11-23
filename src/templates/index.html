@@ -67,6 +67,7 @@
                 <p>{{ wish.price }}</p>
                 <p>{{ wish.details }}</p>
               </li>
+              <a href="/remove">Remove</a>
             {% else %}
               <li>No wish has been added yet. Add your wish <a href="{{ url_for('add') }}">here</a></li>
             {% endfor %}

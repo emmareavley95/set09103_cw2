@@ -68,41 +68,15 @@ def add():
   db.execute('INSERT INTO wishlists (title,quantity,price,details) VALUES(?,?,?,?)', 
             [request.form['title'], request.form['quantity'], request.form['price'], request.form['details']])
   db.commit()
+  session['wish_added'] = True
   flash('Your wish has been added to your list')
   return redirect(url_for('index'))
 
-@app.route('/additem', methods=['GET','POST'])
-def additem():
-  if request.method == 'POST':
-    try:
-      title = request.form['title']
-      quantity = request.form['quantity']
-      price = request.form['price']
-      details = request.form['details']
-
-      with sqlite3.connect("wish_db.db") as con:
-        cur = con.cursor()
-        cur.execute("INSERT INTO wishlists (title,quantity,price,details) VALUES(?,?,?,?)",(title,quantity,price,details))
-        con.commit()
-        result = "Your wish has been added"
-    except:
-      con.rollback()
-      result = "you have not completed the form, please try again later"
-
-    finally:
-      return render_template("index.html", result=result)
-      con.close()
-
-@app.route('/list')
-def list():
-  con = sqlite3.connect("wish_db.db")
-  con.row_factory = sqlite3.Row
-
-  cur = con.cursor()
-  cur.execute("select * from wishlists")
-
-  rows = cur.fetchall();
-  return render_template("index.html", rows=rows)
+@app.route('/remove')
+def remove():
+  session.pop('wish_added', None)
+  flash('Your wish has been removed from your list')
+  return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET','POST'])
 def login():
