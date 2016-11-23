@@ -32,7 +32,7 @@
       </div>
     </div>
   </nav>
-
+{% block content %}
   <div class="container">
     <div class="row">
       <div class="box">
@@ -45,9 +45,42 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
+
+          {{ result }}
+          </br>
+
+          <h2>My Wishlist</h2>
+
+          <form action="{{ url_for('add') }}" method="POST" name="wishlist">
+            Title: <input type="text" name="title" id="title" class="form-control" placeholder="Title" />
+            Quantity: <input type="number" name="quantity" id="quantity" class="form-control" />
+            Price: <input type="text" name="price" id="price" class="form-control" placeholder="Price" />
+            Details: <input type="text" name="details" id="details" class="form-control" placeholder="Details" />
+            <button type="submit" name="submit" id="Submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+          </form>
+          <ul class="mywishlist">
+            <li>
+              <h3>Title</h3>
+              <td>Quantity</td>
+              <td>Price</td>
+              <td>Details</td>
+            </li>
+
+            {% for wish in wishlists %}
+              <li>
+                <h3>{{ wish.title }}</h3>
+                <p>{{ wish.quantity }} , {{ wish.price }} , {{ wish.details }}</p>
+              </li>
+            {% else %}
+              <li>No wish has been added yet. Add your wish <a href="{{ url_for('add') }}">here</a></li>
+            {% endfor %}
+
+          </table>
+
         </div>
       </div>
     </div>
   </div>
+{% endblock %}
 </body>
 </html>
