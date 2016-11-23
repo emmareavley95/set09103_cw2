@@ -59,17 +59,13 @@
             <button type="submit" name="submit" id="Submit" class="btn btn-lg btn-primary btn-block">Submit</button>
           </form>
           <ul class="mywishlist">
-            <li>
-              <h3>Title</h3>
-              <td>Quantity</td>
-              <td>Price</td>
-              <td>Details</td>
-            </li>
 
             {% for wish in wishlists %}
               <li>
                 <h3>{{ wish.title }}</h3>
-                <p>{{ wish.quantity }} , {{ wish.price }} , {{ wish.details }}</p>
+                <p>{{ wish.quantity }}</p>
+                <p>{{ wish.price }}</p>
+                <p>{{ wish.details }}</p>
               </li>
             {% else %}
               <li>No wish has been added yet. Add your wish <a href="{{ url_for('add') }}">here</a></li>

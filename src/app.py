@@ -2,9 +2,20 @@ import sqlite3
 import os
 
 from flask import Flask, g, render_template, url_for, request, redirect, session, flash, abort
+from functools import wraps
+
 app = Flask(__name__)
 app.secret_key = 'sGJeN21Z]=6RmK='
 db_location = 'var/wish_db.db'
+
+def required(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        status = session.get('logged_in', False)
+        if not status:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorator
 
 def get_db():
     db = getattr(g, 'db', None)
@@ -41,10 +52,12 @@ def root():
     return render_template('home.html')
 
 @app.route('/index')
+@required
 def index():
   db = get_db()
   cur = db.execute('select title, quantity, price, details from wishlists order by wish desc')
-  wishlists = cur.fetchall()
+  wishlists = [dict(title=row[0], quantity=row[1], price=row[2], details=row[3]) for row in cur.fetchall()]
+  db.close()
   return render_template('index.html', wishlists=wishlists)
 
 @app.route('/add', methods=['GET','POST'])
@@ -99,7 +112,7 @@ def login():
       error = 'Incorrect Username or Password, Please try again.'
     else:
       session['logged_in'] = True
-      flash('Welcome {{ username }}! You can now send your wishlist to Santa')
+      flash('Welcome! You can now send your wishlist to Santa')
       return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
