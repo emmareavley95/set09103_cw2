@@ -43,7 +43,7 @@ def root():
 @app.route('/index')
 def index():
   db = get_db()
-  cur = db.execute('select title, quantity, price, details from wishlists order by id desc')
+  cur = db.execute('select title, quantity, price, details from wishlists order by wish desc')
   wishlists = cur.fetchall()
   return render_template('index.html', wishlists=wishlists)
 

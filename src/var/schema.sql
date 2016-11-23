@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE wishlists (
-  id integer primary key autoincrement,
+  wish integer primary key autoincrement,
   title text not null,
   quantity number not null,
   price text not null,
