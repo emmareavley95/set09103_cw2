@@ -1,0 +1,40 @@
+<!-- <html>
+<head>
+  <meta charset="utf-8">
+  <title>Christmas Wishlist</title>
+
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/business-casual.css') }}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+</head>
+
+<body> -->
+{% extends "index.html" %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="box">
+        <div class="col-lg-12 text-center">
+          <h2>Christmas vibes</h2>
+          <h3>Enjoy some christmas song!</h3>
+
+          <audio controls="controls" autoplay="autoplay"></audio>
+          <ul>
+            {% for song in songs %}
+              <li><a href="javascrit:void(0);" onclick="playSong('{{ song }}')">{{ song }}</a></li>
+            {% endfor %}
+          </ul>
+
+          <script type="text/javascript">
+            function playSong(song) {
+              $('audio').attr('src', '/static/music/'+song);
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+</body>
+</html>
