@@ -2,9 +2,10 @@ DROP TABLE if EXISTS users;
 DROP TABLE if EXISTS wishlists;
 
 CREATE TABLE users (
-  username text,
-  email text,
-  password text
+  id integer primary key autoincrement,
+  username text not null,
+  email text not null,
+  password text not null
 );
 
 CREATE TABLE wishlists (
