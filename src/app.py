@@ -39,18 +39,17 @@ def init_db():
 
 @app.route('/', methods=['GET','POST'])
 def root():
- # db = get_db()
- # db.cursor().execute('insert into users values ("emma", "emma.reavley95@gmail.com", "dijon78")')
- # db.commit()
-
-  if request.method == 'POST':
-  #  db = get_db()
-  #  cur = db.execute('INSERT INTO users (username,email,password) VALUES(?,?,?)',
-  #                  [request.form['username'], request.form['email'], request.form['password']])
-    
-    return render_template('index.html', username=username, email=email), 200
-  else:
-    return render_template('home.html')
+    if request.method == 'POST':
+      #username = request.form['username']
+      #email = request.form['email']
+      #password = request.form['password']
+      db = get_db()
+      cur = db.execute('INSERT INTO users (username,email,password) VALUES(?,?,?)',
+                      [request.form['username'], request.form['email'], request.form['password']])
+      db.commit()
+      return redirect(url_for('index'))
+    else:
+      return render_template('home.html')
 
 @app.route('/index')
 @required
@@ -69,20 +68,28 @@ def add():
   db.execute('INSERT INTO wishlists (title,quantity,price,details) VALUES(?,?,?,?)', 
             [request.form['title'], request.form['quantity'], request.form['price'], request.form['details']])
   db.commit()
-  session['wish_added'] = True
+ # session['wish_added'] = True
   flash('Your wish has been added to your list')
   return redirect(url_for('index'))
 
-@app.route('/remove', methods=['GET','POST'])
+@app.route('/remove', methods=['GET'])
 def remove():
   test = request.args.get('wishid', '')
   print test
   db = get_db()
-  db.execute('DELETE FROM wishlists WHERE wishid=?', [request.form['title'], request.form['quantity'], request.form['price'], request.form['details']])
+  db.execute('DELETE FROM wishlists WHERE wish=?', ['remove'])
   db.commit()
-  session.pop('wish_added', None)
+  cur = db.execute("select * from wishlists")
+  row = cur.fetchall()
+#  session.pop('wish_added', None)
   flash('Your wish has been removed from your list')
   return redirect(url_for('index'))
+ # return render_template("index.html",row=row)
+
+@app.route('/music', methods=['GET'])
+def music():
+    songs = os.listdir('static/music/')
+    return render_template('xmasmusic.html', songs=songs)
 
 @app.route('/login', methods=['GET','POST'])
 def login():

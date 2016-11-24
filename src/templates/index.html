@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Christmas Wishlist</title>
-
+  
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -31,9 +32,9 @@
      <!-- <div class="collapse navbar-collapse"
      id="bs-example-navbar-collapse-1"> -->
         <ul class="nav navbar-nav">
-          <li><a href="/">Home</a></li>
+          <li><a href="/index">Home</a></li>
           <li><a href="/">My list</a></li>
-          <li><a href="/">Talk with Santa</a></li>
+          <li><a href="/music">Christmas vibes</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
       </div>
@@ -74,7 +75,8 @@
                 <p>{{ wish.price }}</p>
                 <p>{{ wish.details }}</p>
               </li>
-              <a href="/remove?wishid={{ wish.title }}">Remove</a>
+              
+              <a href="/remove?wishid={{ wish.title }}" name="remove">Remove</a>
             {% else %}
               <li>No wish has been added yet. Add your wish <a href="{{ url_for('add') }}">here</a></li>
             {% endfor %}
