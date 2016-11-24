@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import sqlite3 as sql
 
 from flask import Flask, g, render_template, url_for, request, redirect, session, flash, abort
 from functools import wraps
@@ -43,10 +44,10 @@ def root():
  # db.commit()
 
   if request.method == 'POST':
-    print request.form
-    username = request.form['username']
-    email = request.form['email']
-    password = request.form['password']
+  #  db = get_db()
+  #  cur = db.execute('INSERT INTO users (username,email,password) VALUES(?,?,?)',
+  #                  [request.form['username'], request.form['email'], request.form['password']])
+    
     return render_template('index.html', username=username, email=email), 200
   else:
     return render_template('home.html')
@@ -72,8 +73,13 @@ def add():
   flash('Your wish has been added to your list')
   return redirect(url_for('index'))
 
-@app.route('/remove')
+@app.route('/remove', methods=['GET','POST'])
 def remove():
+  test = request.args.get('wishid', '')
+  print test
+  db = get_db()
+  db.execute('DELETE FROM wishlists WHERE wishid=?', [request.form['title'], request.form['quantity'], request.form['price'], request.form['details']])
+  db.commit()
   session.pop('wish_added', None)
   flash('Your wish has been removed from your list')
   return redirect(url_for('index'))
