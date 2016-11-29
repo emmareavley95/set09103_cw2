@@ -5,15 +5,16 @@
   <title>Christmas Wishlist</title>
   
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
   <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/business-casual.css') }}" rel="stylesheet">
 
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type='text/css'>
 </head>
 
 <body>
@@ -45,6 +46,11 @@
     <div class="row">
       <div class="box">
         <div class="col-lg-12 text-center">
+          {% if session_user %}
+              <h2 class="intro-text">Welcome<b> {{ session_user }}</b>!</h2>
+              <p>Start creating your christmas wishlist now. Add your wish.</p>
+          {% endif %}
+
           <h2 class="intro-text">Dear Santa Claus! For Christmas I would like... </h2>
           {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -57,7 +63,7 @@
           {{ result }}
           </br>
 
-          <h2>My Wishlist</h2>
+          <h2 class="title">My Wishlist</h2>
 
           <form action="{{ url_for('add') }}" method="POST" name="wishlist">
             Title: <input type="text" name="title" id="title" class="form-control" placeholder="Title" />
@@ -66,6 +72,8 @@
             Details: <input type="text" name="details" id="details" class="form-control" placeholder="Details" />
             <button type="submit" name="submit" id="Submit" class="btn btn-lg btn-primary btn-block">Submit</button>
           </form>
+
+          <h2 class="title">My Wishlist</h2>
           <ul class="mywishlist">
 
             {% for wish in wishlists %}
@@ -88,5 +96,11 @@
     </div>
   </div>
 {% endblock %}
+<style>
+  .title {
+    font-family: 'Pacifico', cursive;
+    color: #FF2E0C;
+  }
+</style>
 </body>
 </html>
