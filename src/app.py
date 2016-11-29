@@ -2,7 +2,8 @@ import sqlite3
 import os
 import sqlite3 as sql
 
-from flask import Flask, g, render_template, url_for, request, redirect, session, flash, abort
+from flask import Flask, g, render_template, url_for, request, redirect, session, escape, flash, abort
+from hashlib import md5
 from functools import wraps
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ db_location = 'var/wish_db.db'
 def required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
-        status = session.get('logged_in', False)
+        status = session.get('username', False)
         if not status:
             return redirect(url_for('login'))
         return f(*args, **kwargs)
@@ -40,20 +41,21 @@ def init_db():
 @app.route('/', methods=['GET','POST'])
 def root():
     if request.method == 'POST':
-      #username = request.form['username']
-      #email = request.form['email']
-      #password = request.form['password']
       db = get_db()
       cur = db.execute('INSERT INTO users (username,email,password) VALUES(?,?,?)',
                       [request.form['username'], request.form['email'], request.form['password']])
       db.commit()
-      return redirect(url_for('index'))
+      return redirect(url_for('login'))
     else:
       return render_template('home.html')
 
 @app.route('/index')
-@required
 def index():
+ # if 'username' in session:
+ #   sess = escape(session['username']).capitalize()
+ #   return render_template('index.html', session_user=sess)
+ # return redirect(url_for('login'))
+
   db = get_db()
   cur = db.execute('select title, quantity, price, details from wishlists order by wish desc')
   wishlists = [dict(title=row[0], quantity=row[1], price=row[2], details=row[3]) for row in cur.fetchall()]
@@ -62,7 +64,7 @@ def index():
 
 @app.route('/add', methods=['GET','POST'])
 def add():
-  if not session.get('logged_in'):
+  if not session.get('username'):
       abort(401)
   db = get_db()
   db.execute('INSERT INTO wishlists (title,quantity,price,details) VALUES(?,?,?,?)', 
@@ -81,7 +83,6 @@ def remove():
   cur = db.execute("select * from wishlists")
   row = cur.fetchall()
   flash('Your wish has been removed from your list')
-#  return redirect(url_for('index'))
   return render_template("index.html",row=row)
 
 @app.route('/music', methods=['GET'])
@@ -91,19 +92,37 @@ def music():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-  error = None
-  if request.method == 'POST':
-    if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
-      error = 'Incorrect Username or Password, Please try again.'
-    else:
-      session['logged_in'] = True
-      flash('Welcome! You can now send your wishlist to Santa')
+  if 'username' in session:
       return redirect(url_for('index'))
+  error = None
+
+  if request.method == 'POST':
+      db = get_db()
+      userform = request.form['username']
+      cur = db.execute("SELECT COUNT(1) FROM users WHERE username=?", [userform])
+      db.commit()
+      if cur.fetchone()[0]:
+          pwdform = request.form['password']
+          cur = db.execute("SELECT password FROM users WHERE username=?", [userform])
+          for row in cur.fetchall():
+              if md5(pwdform).hexdigest() == row[0]:
+                  session['username'] = request.form['username']
+                  return redirect(url_for('index'))
+              else:
+                  error = "Incorrect Username or Password. Please try again."
+  else:
+      error = "Incorrect Username or Password"
+ #   if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
+ #     error = 'Incorrect Username or Password, Please try again.'
+ #   else:
+ #     session['logged_in'] = True
+ #     flash('Welcome! You can now send your wishlist to Santa')
+ #     return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
-  session.pop('logged_in', None)
+  session.pop('username', None)
   flash('Successful log out')
   return redirect(url_for('root'))
 
