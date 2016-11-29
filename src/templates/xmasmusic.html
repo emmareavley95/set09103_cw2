@@ -21,15 +21,18 @@
 
           <audio controls="controls" autoplay="autoplay"></audio>
           <ul>
-            {% for song in songs %}
-              <li><a href="javascrit:void(0);" onclick="playSong('{{ song }}')">{{ song }}</a></li>
-            {% endfor %}
+          {% for song in songs %}
+              <li><a href="javascript:void(0);">{{ song }}</a></li>
+          {% endfor %}
           </ul>
 
           <script type="text/javascript">
-            function playSong(song) {
-              $('audio').attr('src', '/static/music/'+song);
-            }
+          {% for song in songs %}
+              $('li').click(function(){
+                  var str = $(this).text()
+                  $('audio').attr('src', '/static/music/'+str);
+              });
+          {% endfor %}
           </script>
         </div>
       </div>
