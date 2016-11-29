@@ -68,23 +68,21 @@ def add():
   db.execute('INSERT INTO wishlists (title,quantity,price,details) VALUES(?,?,?,?)', 
             [request.form['title'], request.form['quantity'], request.form['price'], request.form['details']])
   db.commit()
- # session['wish_added'] = True
   flash('Your wish has been added to your list')
   return redirect(url_for('index'))
 
 @app.route('/remove', methods=['GET'])
 def remove():
-  test = request.args.get('wishid', '')
-  print test
+  delete = request.args.get('wishid', '')
+  print delete
   db = get_db()
-  db.execute('DELETE FROM wishlists WHERE wish=?', ['remove'])
+  db.execute('DELETE FROM wishlists WHERE title=?', [delete])
   db.commit()
   cur = db.execute("select * from wishlists")
   row = cur.fetchall()
-#  session.pop('wish_added', None)
   flash('Your wish has been removed from your list')
-  return redirect(url_for('index'))
- # return render_template("index.html",row=row)
+#  return redirect(url_for('index'))
+  return render_template("index.html",row=row)
 
 @app.route('/music', methods=['GET'])
 def music():
