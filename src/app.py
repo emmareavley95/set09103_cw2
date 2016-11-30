@@ -125,7 +125,7 @@ def login():
  #         error = 'Incorrect Username or Password. Please try again.'
  #     else:
  #         return redirect(url_for('index'))
-     if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
+     if request.form['username'] != 'admin' or request.form['password'] != 'adminAWT':
        error = 'Incorrect Username or Password, Please try again.'
      else:
        session['username'] = True
