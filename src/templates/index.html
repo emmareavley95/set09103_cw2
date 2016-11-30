@@ -18,24 +18,21 @@
 </head>
 
 <body>
-  <div class="brand">Christmas Wishlist</div>
+ <div class="brand">Christmas Wishlist</div>
   <nav class="navbar navbar-default" role="navigation">
     <div class="container">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        
-  <!--      <a href="/index" class="navbar-brand"><img class="logo" id="logo" src="static/images/logo.png" alt="logo"></a>
-        </div> -->
-     <!-- <div class="collapse navbar-collapse"
-     id="bs-example-navbar-collapse-1"> -->
-        <ul class="nav navbar-nav">
+        <a class="navbar-brand" href="/index">Christmas Wishlist</a>
+      </div>
+      <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px">
+        <ul class="collapse nav navbar-nav">
           <li><a href="/index">Home</a></li>
-          <li><a href="/">My list</a></li>
           <li><a href="/music">Christmas vibes</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
@@ -60,8 +57,6 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-
-          {{ result }}
           </br>
         </div>
       </div>
@@ -73,9 +68,10 @@
 
           <form action="{{ url_for('add') }}" method="POST" name="wishlist">
             Title: <input type="text" name="title" id="title" class="form-control" placeholder="Title" />
-            Quantity: <input type="number" name="quantity" id="quantity" class="form-control" />
-            Price: <input type="text" name="price" id="price" class="form-control" placeholder="Price" />
-            Details: <input type="text" name="details" id="details" class="form-control" placeholder="Details" />
+            Quantity: <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Quantity needed" />
+            Price: <input type="text" name="price" id="price" class="form-control" placeholder="Average price" />
+            Details: <input type="text" name="details" id="details"
+            class="form-control" placeholder="Personal information: How exactly would your wish look like?" />
             <button type="submit" name="submit" id="Submit" class="btn btn-lg btn-primary btn-block">Submit</button>
           </form>
         </div>
@@ -91,12 +87,12 @@
             {% for wish in wishlists %}
               <li>
                 <h3>{{ wish.title }}</h3>
-                <p>{{ wish.quantity }}</p>
-                <p>{{ wish.price }}</p>
-                <p>{{ wish.details }}</p>
+                <p>Quantity needed: {{ wish.quantity }}</p>
+                <p>Average price: {{ wish.price }}</p>
+                <p>More personal information: {{ wish.details }}</p>
               </li>
               
-              <a href="/remove?wishid={{ wish.title }}" name="remove">Remove</a>
+              <strong><a href="/remove?wishid={{ wish.title }}" name="remove">Remove</a></strong>
             {% else %}
               <li>No wish has been added yet. Add your wish <a href="{{ url_for('add') }}">here</a></li>
             {% endfor %}
@@ -109,9 +105,19 @@
   </div>
 {% endblock %}
 <style>
-  .title {
+  body  {
+    background: url(../static/img/bg_xmastree.jpg) no-repeat center center fixed;
+  }
+  .brand {
     font-family: 'Pacifico', cursive;
-    color: #FF2E0C;
+  }
+  .form-text {
+    font-family: 'Aref Ruqaa', serif;
+    font-size: 25px;
+  }
+
+  .title {
+    color: #008410;
   }
 </style>
 </body>
