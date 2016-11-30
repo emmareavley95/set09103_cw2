@@ -107,7 +107,7 @@ def remove():
   flash('Your wish has been removed from your list')
   return render_template("index.html",row=row)
 
-@app.route('/music', methods=['GET'])
+@app.route('/music', methods=['GET', 'POST'])
 def music():
     songs = os.listdir('static/music/')
     return render_template('xmasmusic.html', songs=songs)
@@ -118,19 +118,19 @@ def login():
  #     return redirect(url_for('index'))
   error = None
   if request.method == 'POST':
-      username = request.form['username']
-      password = request.form['password']
-      complete = validate(username, password)
-      if complete == False:
-          error = 'Incorrect Username or Password. Please try again.'
-      else:
-          return redirect(url_for('index'))
-  #   if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
-  #     error = 'Incorrect Username or Password, Please try again.'
-  #   else:
-  #     session['logged_in'] = True
-  #     flash('Welcome! You can now send your wishlist to Santa')
-  #     return redirect(url_for('index'))
+ #     username = request.form['username']
+ #     password = request.form['password']
+ #     complete = validate(username, password)
+ #     if complete == False:
+ #         error = 'Incorrect Username or Password. Please try again.'
+ #     else:
+ #         return redirect(url_for('index'))
+     if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
+       error = 'Incorrect Username or Password, Please try again.'
+     else:
+       session['username'] = True
+       flash('Welcome! You can now send your wishlist to Santa')
+       return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
 @app.route('/logout')
