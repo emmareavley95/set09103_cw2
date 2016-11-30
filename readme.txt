@@ -16,3 +16,7 @@ Christmas Wishlist
 
 PS: in case you could not log in with your username and password on
 http://0.0.0.0:5000/login, go create another profile again on the root page.
+
+For http://0.0.0.0:5000/login, administrator account:
+Username: admin
+Password: adminAWT
