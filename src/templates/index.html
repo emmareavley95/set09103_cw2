@@ -50,13 +50,15 @@
           {% endif %}
 
           <h2 class="intro-text">Dear Santa Claus! For Christmas I would like... </h2>
-          {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              {% for message in messages %}
-                {{ message | safe }}
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
+          <div class="flash">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  {{ message | safe }}
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          </div>
           </br>
         </div>
       </div>
@@ -115,9 +117,12 @@
     font-family: 'Aref Ruqaa', serif;
     font-size: 25px;
   }
-
   .title {
     color: #008410;
+  }
+  .flash {
+    padding: 10px;
+    width: 400px;
   }
 </style>
 </body>

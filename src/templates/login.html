@@ -38,13 +38,16 @@
           {% if error %}
             <p class="error"><strong>Error:</strong> {{ error }}
           {% endif %}
-          {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              {% for message in messages %}
-                {{ message | safe }}
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
+          </br>
+          <div class="flash">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  {{ message | safe }}
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          </div>
         </div>
       </div>
     </div>
@@ -60,6 +63,10 @@
   .form-text {
     font-family: 'Aref Ruqaa', serif;
     font-size: 25px;
+  }
+  .flash {
+    padding: 10px;
+    width: 400px;
   }
 </style>
 
