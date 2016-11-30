@@ -18,6 +18,7 @@
 </head>
 
 <body>
+  <div class="brand">Christmas Wishlist</div>
   <nav class="navbar navbar-default" role="navigation">
     <div class="container">
       <div class="navbar-header">
@@ -28,8 +29,8 @@
           <span class="icon-bar"></span>
         </button>
         
-        <a href="/index" class="navbar-brand"><img class="logo" id="logo" src="static/images/logo.png" alt="logo"></a>
-        </div>
+  <!--      <a href="/index" class="navbar-brand"><img class="logo" id="logo" src="static/images/logo.png" alt="logo"></a>
+        </div> -->
      <!-- <div class="collapse navbar-collapse"
      id="bs-example-navbar-collapse-1"> -->
         <ul class="nav navbar-nav">
@@ -62,7 +63,12 @@
 
           {{ result }}
           </br>
-
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="box">
+        <div class="col-lg-12">
           <h2 class="title">My Wishlist</h2>
 
           <form action="{{ url_for('add') }}" method="POST" name="wishlist">
@@ -72,7 +78,13 @@
             Details: <input type="text" name="details" id="details" class="form-control" placeholder="Details" />
             <button type="submit" name="submit" id="Submit" class="btn btn-lg btn-primary btn-block">Submit</button>
           </form>
+        </div>
+      </div>
+    </div>
 
+    <div class="row">
+      <div class="box">
+        <div class="col-lg-12">
           <h2 class="title">My Wishlist</h2>
           <ul class="mywishlist">
 
@@ -103,4 +115,13 @@
   }
 </style>
 </body>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <p>Copyright &copy; Your Website 2014</p>
+      </div>
+    </div>
+  </div>
+</footer>
 </html>
