@@ -26,6 +26,25 @@ def get_db():
       g.db = db
     return db
 
+def check_password(hashed_password, user_password):
+    return hashed_password == hashlib.md5(user_password.encode()).hexdigest()
+    print hashed_password
+
+def validate(username, password):
+    con = sqlite3.connect(db_location)
+    complete = False
+    with con:
+        cur = con.cursor()
+
+        cur = db.execute("SELECT * FROM users")
+        rows = cur.fetchall()
+        for row in rows:
+            userdb = row[0]
+            pwddb = row[2]
+        if userdb == username:
+            complete = check_password(pwddb, password)
+    return complete
+
 @app.teardown_appcontext
 def close_db_connection(exception):
     db = getattr(g, 'db', None)
@@ -40,14 +59,17 @@ def init_db():
 
 @app.route('/', methods=['GET','POST'])
 def root():
-    if request.method == 'POST':
-      db = get_db()
-      cur = db.execute('INSERT INTO users (username,email,password) VALUES(?,?,?)',
-                      [request.form['username'], request.form['email'], request.form['password']])
-      db.commit()
-      return redirect(url_for('login'))
-    else:
-      return render_template('home.html')
+  error = None
+  if request.method == 'POST':
+    db = get_db()
+    cur = db.execute('INSERT INTO users (username,email,password) VALUES(?,?,?)',
+                    [request.form['username'], request.form['email'], request.form['password']])
+    db.commit()
+    return redirect(url_for('index'))
+  else:
+    error = "Please create your profile first."
+    return render_template('home.html', error=error)
+  return render_template('home.html')
 
 @app.route('/index')
 def index():
@@ -92,32 +114,23 @@ def music():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-  if 'username' in session:
-      return redirect(url_for('index'))
-  error = None
-
-  if request.method == 'POST':
-      db = get_db()
-      userform = request.form['username']
-      cur = db.execute("SELECT COUNT(1) FROM users WHERE username=?", [userform])
-      db.commit()
-      if cur.fetchone()[0]:
-          pwdform = request.form['password']
-          cur = db.execute("SELECT password FROM users WHERE username=?", [userform])
-          for row in cur.fetchall():
-              if md5(pwdform).hexdigest() == row[0]:
-                  session['username'] = request.form['username']
-                  return redirect(url_for('index'))
-              else:
-                  error = "Incorrect Username or Password. Please try again."
-  else:
-      error = "Incorrect Username or Password"
- #   if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
- #     error = 'Incorrect Username or Password, Please try again.'
- #   else:
- #     session['logged_in'] = True
- #     flash('Welcome! You can now send your wishlist to Santa')
+ # if 'username' in session:
  #     return redirect(url_for('index'))
+  error = None
+  if request.method == 'POST':
+      username = request.form['username']
+      password = request.form['password']
+      complete = validate(username, password)
+      if complete == False:
+          error = 'Incorrect Username or Password. Please try again.'
+      else:
+          return redirect(url_for('index'))
+  #   if request.form['username'] != 'admin' or request.form['password'] != 'simon_AWT':
+  #     error = 'Incorrect Username or Password, Please try again.'
+  #   else:
+  #     session['logged_in'] = True
+  #     flash('Welcome! You can now send your wishlist to Santa')
+  #     return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
 @app.route('/logout')
